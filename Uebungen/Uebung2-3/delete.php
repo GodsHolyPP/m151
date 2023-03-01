@@ -7,14 +7,11 @@
     try {
         $id = $_GET['id'];
         $conn = new PDO("mysql:host=$servername;dbname=$database", $username, $password);
-        
-      $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-      echo "Connected successfully";
+        $sql = $conn->prepare('DELETE from orders  where customer_id=:id');
+        $sql->execute([ 'id' => $id ]);
 
-      foreach ($conn->query("DELETE * from orders  where customer_id=$id") as $row) {
-        echo "<br>";
-        echo "gelöscht";
-    } 
+      $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+      $conn->query($sql);
        $conn = null;
     } catch(PDOException $e) {
       echo "Connection failed: " . $e->getMessage();
